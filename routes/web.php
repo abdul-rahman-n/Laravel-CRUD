@@ -1,6 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\CustomerController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -16,3 +18,9 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+
+
+
+Route::post('customers/import', [CustomerController::class, 'import'])->name('customers.import');
+Route::get('customers/export', [CustomerController::class, 'export'])->name('customers.export');
+Route::resource('customers', CustomerController::class);
