@@ -1,6 +1,6 @@
 # Laravel CRUD Task with Excel Import/Export
 
-This is a Laravel project that implements a simple Customer Management System. The project supports CRUD (Create, Read, Update, Delete) operations on customer data, Excel file import/export, with data validation
+This is a Laravel project that implements a simple Customer Management System. The project supports CRUD (Create, Read, Update, Delete) operations on customer data, Excel file import/export with data validation
 
 ## Features
 - **CRUD Operations**: Manage customer data (Name, Email, Phone).
