@@ -24,30 +24,25 @@ class CustomersImport implements ToModel, WithHeadingRow
      */
     public function model(array $row)
     {
-        // Check for missing columns
         $missingColumns = array_diff($this->expectedColumns, array_keys($row));
 
         if (!empty($missingColumns)) {
-            // Store error message in the session for missing columns
             Session::flash('import_error', 'Missing columns: ' . implode(', ', $missingColumns));
-            return null; // Skip the row
+            return null;
         }
 
-        // Validate row data for correct format
         $validator = Validator::make($row, [
-            'name' => 'required|alpha|max:255',
+            'name' => 'required|string|max:255',
             'email' => 'required|email',
             'phone' => 'required|numeric',
         ]);
 
-        // If validation fails, store error messages in session and skip the row
         if ($validator->fails()) {
             $errorMessages = $validator->errors()->all();
             Session::flash('import_error', 'Row has validation errors: ' . implode(', ', $errorMessages));
-            return null; // Skip the invalid row
+            return null;
         }
 
-        // If all columns are present and valid, create a new customer
         return new Customer([
             'name'  => $row['name'],
             'email' => $row['email'],

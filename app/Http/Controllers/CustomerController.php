@@ -23,16 +23,16 @@ class CustomerController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
+        $validated = $request->validate([
             'name' => 'required|regex:/^[\pL\s]+$/u|max:255',
             'email' => 'required|email|unique:customers,email',
-            'phone' => 'required|string|max:15',
+            'phone' => 'required|numeric',
         ]);
 
-        Customer::create($request->all());
+        Customer::create($validated);
+
         return redirect()->route('customers.index')->with('success', 'Customer added successfully!');
     }
-
 
     public function show(Customer $customer)
     {
@@ -46,16 +46,17 @@ class CustomerController extends Controller
 
     public function update(Request $request, Customer $customer)
     {
-        $request->validate([
+        $validated = $request->validate([
             'name' => 'required|regex:/^[\pL\s]+$/u|max:255',
-            'email' => 'required|email|unique:customers,email,' . $customer->id,
-            'phone' => 'required|string|max:15',
+            'email' => 'required|email|unique:customers,email,' . $customer->id, // Ignore current customer's email during validation
+            'phone' => 'required|numeric',
         ]);
 
-        $customer->update($request->all());
+        $customer->update($validated);
+
         return redirect()->route('customers.index')->with('success', 'Customer updated successfully!');
     }
-
+    
     public function destroy(Customer $customer)
     {
         $customer->delete();

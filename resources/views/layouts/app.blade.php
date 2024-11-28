@@ -14,38 +14,22 @@
     </nav>
 
     <main class="py-4">
-        <div class="container">
-            @if (session('success'))
-            <div id="alert-message" class="alert alert-success">
-                {{ session('success') }}
-            </div>
-            @endif
-
-            @if (session('error'))
-            <div id="alert-message" class="alert alert-danger">
-                {{ session('error') }}
-            </div>
-            @endif
-
-            @yield('content')
-        </div>
+        @yield('content')
     </main>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            // Select all alert messages
             const alerts = document.querySelectorAll('.alert');
 
-            // Set a timeout to hide each alert after 5 seconds
             alerts.forEach(alert => {
                 setTimeout(() => {
                     alert.style.transition = 'opacity 0.5s ease';
-                    alert.style.opacity = '0'; // Start fading out
+                    alert.style.opacity = '0';
 
                     setTimeout(() => {
-                        alert.remove(); // Remove from DOM after fade-out
-                    }, 500); // Wait for the fade-out transition
-                }, 5000); // 5000ms = 5 seconds delay
+                        alert.remove();
+                    }, 500);
+                }, 5000);
             });
         });
     </script>
