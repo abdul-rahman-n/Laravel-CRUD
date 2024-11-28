@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Customer;
-use Illuminate\Http\Request;
+use App\Http\Requests\StoreCustomerRequest;
+use App\Http\Requests\UpdateCustomerRequest;
+use App\Http\Requests\ImportCustomerRequest;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\CustomersExport;
 use App\Imports\CustomersImport;
@@ -21,15 +23,9 @@ class CustomerController extends Controller
         return view('customers.create');
     }
 
-    public function store(Request $request)
+    public function store(StoreCustomerRequest $request)
     {
-        $validated = $request->validate([
-            'name' => 'required|regex:/^[\pL\s]+$/u|max:255',
-            'email' => 'required|email|unique:customers,email',
-            'phone' => 'required|numeric',
-        ]);
-
-        Customer::create($validated);
+        Customer::create($request->validated());
 
         return redirect()->route('customers.index')->with('success', 'Customer added successfully!');
     }
@@ -44,31 +40,21 @@ class CustomerController extends Controller
         return view('customers.edit', compact('customer'));
     }
 
-    public function update(Request $request, Customer $customer)
+    public function update(UpdateCustomerRequest $request, Customer $customer)
     {
-        $validated = $request->validate([
-            'name' => 'required|regex:/^[\pL\s]+$/u|max:255',
-            'email' => 'required|email|unique:customers,email,' . $customer->id, // Ignore current customer's email during validation
-            'phone' => 'required|numeric',
-        ]);
-
-        $customer->update($validated);
+        $customer->update($request->validated());
 
         return redirect()->route('customers.index')->with('success', 'Customer updated successfully!');
     }
-    
+
     public function destroy(Customer $customer)
     {
         $customer->delete();
         return redirect()->route('customers.index')->with('success', 'Customer deleted successfully!');
     }
 
-    public function import(Request $request)
+    public function import(ImportCustomerRequest $request)
     {
-        $request->validate([
-            'file' => 'required|mimes:xlsx,xls',
-        ]);
-
         try {
             Excel::import(new CustomersImport, $request->file('file'));
 
