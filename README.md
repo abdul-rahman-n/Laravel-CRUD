@@ -9,7 +9,7 @@ This is a Laravel project that implements a simple Customer Management System. T
 - **Validation**: Data validation for customer fields and Excel import data.
 
 ## Requirements
-- PHP 7.3+
+- PHP 8.0+
 - Laravel 8.0+
 - Composer
 - MySQL or any other supported database
